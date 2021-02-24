@@ -1,0 +1,42 @@
+package com.levelup.dao;
+
+import com.levelup.model.Question;
+
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import java.util.Date;
+import java.util.List;
+
+public class QuestionsDao {
+    private EntityManager manager;
+
+    public QuestionsDao(EntityManager manager) {
+        this.manager = manager;
+    }
+
+    public List<Question> findAll(){
+        return manager.createQuery("from Question", Question.class).getResultList();
+    }
+
+    public Question findByTitle(String title) {
+        try {
+            return manager.createQuery("from Question where title = :paramsTitle", Question.class)
+                    .setParameter("paramsTitle", title)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public List<Question> findByAuthor(String author) {
+        return manager.createQuery("from Question question where question.author.login = :authorLogin", Question.class)
+                .setParameter("authorLogin", author)
+                .getResultList();
+    }
+
+    public List<Question> findByDateBefore(Date date) {
+        return manager.createQuery("from Question where created <= :dateParams", Question.class)
+                .setParameter("dateParams", date)
+                .getResultList();
+    }
+}

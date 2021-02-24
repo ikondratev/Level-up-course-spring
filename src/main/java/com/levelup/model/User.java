@@ -18,10 +18,13 @@ public class User {
     @Column(nullable = false, length = 50)
     private String password;
 
+    @Enumerated(EnumType.STRING)
+    private UserStates status;
+
     @Temporal(TemporalType.DATE)
     private Date created;
 
-    @Transient
+    @Column(nullable = false)
     private boolean isAdmin;
 
     @OneToMany(mappedBy = "author")
@@ -31,7 +34,7 @@ public class User {
     private List<Comment> listOfComments;
 
     @OneToMany(mappedBy = "author")
-    private List<Like> listOfLikes;
+    private List<Thumb> listOfThumbs;
 
     @OneToMany(mappedBy = "author")
     private List<Answer> listOfAnswers;
@@ -45,12 +48,12 @@ public class User {
         this.isAdmin = isAdmin;
     }
 
-    public List<Like> getListOfLikes() {
-        return listOfLikes;
+    public List<Thumb> getListOfLikes() {
+        return listOfThumbs;
     }
 
-    public void setListOfLikes(List<Like> listOfLikes) {
-        this.listOfLikes = listOfLikes;
+    public void setListOfLikes(List<Thumb> listOfThumbs) {
+        this.listOfThumbs = listOfThumbs;
     }
 
     public Long getId() {
@@ -115,5 +118,13 @@ public class User {
 
     public void setCreated(Date created) {
         this.created = created;
+    }
+
+    public UserStates getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStates status) {
+        this.status = status;
     }
 }

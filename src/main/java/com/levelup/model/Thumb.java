@@ -5,7 +5,7 @@ import java.util.Date;
 
 @Entity
 @Table(name = "Likes")
-public class Like {
+public class Thumb {
 
     @Id
     @GeneratedValue
@@ -20,7 +20,7 @@ public class Like {
     @ManyToOne
     private User author;
 
-    public Like() {
+    public Thumb() {
     }
 
     public Answer getAnswer() {

@@ -22,7 +22,7 @@ public class Answer {
     private List<Comment> listOfComments;
 
     @OneToMany(mappedBy = "answer")
-    private List<Like> listOfLikes;
+    private List<Thumb> listOfThumbs;
 
     @ManyToOne
     private User author;
@@ -34,12 +34,12 @@ public class Answer {
         return listOfComments;
     }
 
-    public List<Like> getListOfLikes() {
-        return listOfLikes;
+    public List<Thumb> getListOfLikes() {
+        return listOfThumbs;
     }
 
-    public void setListOfLikes(List<Like> listOfLikes) {
-        this.listOfLikes = listOfLikes;
+    public void setListOfLikes(List<Thumb> listOfThumbs) {
+        this.listOfThumbs = listOfThumbs;
     }
 
     public void setListOfComments(List<Comment> listOfComments) {

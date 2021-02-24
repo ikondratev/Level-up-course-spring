@@ -1,6 +1,7 @@
 package com.levelup.tests;
 
 import com.levelup.model.*;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -11,11 +12,22 @@ import javax.persistence.Persistence;
 public class EntityManagerTest {
     private EntityManagerFactory factory;
     private EntityManager manager;
+    private String base = System.getProperty("test_base");
 
     @Before
     public void initFactoryAndManager(){
-        factory = Persistence.createEntityManagerFactory("TestPersistenceUnit");
+        factory = Persistence.createEntityManagerFactory(base);
         manager = factory.createEntityManager();
+    }
+
+    @After
+    public void cleanResources() {
+        if (factory != null) {
+            factory.close();
+        }
+        if (manager != null) {
+            manager.close();
+        }
     }
 
     @Test
@@ -25,9 +37,8 @@ public class EntityManagerTest {
             User user = new User("AdmintTest", "@adminTest", true);
             manager.persist(user);
             manager.getTransaction().commit();
-        } finally {
-            manager.close();
-            factory.close();
+        } catch (Exception e) {
+            e.getStackTrace();
         }
     }
 
@@ -38,9 +49,8 @@ public class EntityManagerTest {
             Question question = new Question("Test title", "Test body question");
             manager.persist(question);
             manager.getTransaction().commit();
-        } finally {
-            manager.close();
-            factory.close();
+        } catch (Exception e) {
+            e.getStackTrace();
         }
     }
 
@@ -51,9 +61,8 @@ public class EntityManagerTest {
             Answer answer = new Answer("Test body answer");
             manager.persist(answer);
             manager.getTransaction().commit();
-        } finally {
-            manager.close();
-            factory.close();
+        } catch (Exception e) {
+            e.getStackTrace();
         }
     }
 
@@ -64,9 +73,8 @@ public class EntityManagerTest {
             Comment comment = new Comment("Test body comment");
             manager.persist(comment);
             manager.getTransaction().commit();
-        } finally {
-            manager.close();
-            factory.close();
+        } catch (Exception e) {
+            e.getStackTrace();
         }
     }
 
@@ -74,12 +82,11 @@ public class EntityManagerTest {
     public void smokeTestLike() {
         try {
             manager.getTransaction().begin();
-            Like like = new Like();
-            manager.persist(like);
+            Thumb thumb = new Thumb();
+            manager.persist(thumb);
             manager.getTransaction().commit();
-        } finally {
-            manager.close();
-            factory.close();
+        } catch (Exception e) {
+            e.getStackTrace();
         }
     }
 }
