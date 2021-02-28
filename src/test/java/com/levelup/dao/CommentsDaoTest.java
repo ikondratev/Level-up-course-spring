@@ -3,9 +3,15 @@ package com.levelup.dao;
 import com.levelup.model.Answer;
 import com.levelup.model.Comment;
 import com.levelup.model.User;
+import com.levelup.tests.TestConfiguration;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -16,21 +22,22 @@ import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class CommentsDaoTest {
-    private EntityManagerFactory factory;
+    @Autowired
     private EntityManager manager;
+
+    @Autowired
     private CommentsDao commentsDao;
-    private String base = System.getProperty("test_base");
+
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 100000000);
     private Answer testAnswer;
 
     @Before
     public void setUp() throws Exception {
-        factory = Persistence.createEntityManagerFactory(base);
-        manager = factory.createEntityManager();
-        commentsDao = new CommentsDao(manager);
-
         manager.getTransaction().begin();
         testAnswer = new Answer("testBodyAnswer");
         User author = new User("testLoginUser", "testPasswordUser", false);
@@ -45,17 +52,6 @@ public class CommentsDaoTest {
         manager.persist(firstComment);
         manager.persist(secondComment);
         manager.getTransaction().commit();
-
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (factory != null) {
-            factory.close();
-        }
-        if (manager != null ) {
-            manager.close();
-        }
     }
 
     @Test

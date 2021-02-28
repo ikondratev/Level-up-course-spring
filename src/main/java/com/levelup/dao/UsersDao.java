@@ -2,19 +2,20 @@ package com.levelup.dao;
 
 import com.levelup.model.User;
 import com.levelup.model.UserStates;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public class UsersDao {
-
+    @Autowired
     private EntityManager manager;
 
-    public UsersDao(EntityManager manager) {
-        this.manager = manager;
-    }
+    public UsersDao() { }
 
     public List<User> findAll() {
         return manager.createQuery("from User", User.class).getResultList();
@@ -34,7 +35,7 @@ public class UsersDao {
 
     public List<User> findByStates(UserStates state) {
         return manager.createQuery("from User where status = :userParams", User.class)
-                .setParameter("userParams", state.toString())
+                .setParameter("userParams", state)
                 .getResultList();
     }
 

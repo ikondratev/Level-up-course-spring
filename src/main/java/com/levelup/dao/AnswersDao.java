@@ -1,17 +1,20 @@
 package com.levelup.dao;
 
 import com.levelup.model.Answer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public class AnswersDao {
+
+    @Autowired
     private EntityManager manager;
 
-    public AnswersDao(EntityManager manager) {
-        this.manager = manager;
-    }
+    public AnswersDao() { }
 
     public List<Answer> findAll(){
         return manager.createQuery("from Answer", Answer.class)

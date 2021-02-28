@@ -3,16 +3,18 @@ package com.levelup.dao;
 import com.levelup.model.Answer;
 import com.levelup.model.Thumb;
 import com.levelup.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.List;
 
+@Repository
 public class ThumbsDao {
+    @Autowired
     EntityManager manager;
 
-    public ThumbsDao(EntityManager manager) {
-        this.manager = manager;
-    }
+    public ThumbsDao(){}
 
     public List<Thumb> findAll() {
         return manager.createQuery("from Thumb", Thumb.class).getResultList();
