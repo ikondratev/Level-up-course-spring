@@ -1,26 +1,35 @@
-package com.levelup.dao;
+package com.levelup.web.dao;
 
-import com.levelup.model.Answer;
-import com.levelup.model.Thumb;
-import com.levelup.model.User;
-import org.junit.After;
+import com.levelup.web.model.Answer;
+import com.levelup.web.model.Thumb;
+import com.levelup.web.model.User;
+import com.levelup.tests.TestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ThumbsDaoTest {
-    private EntityManagerFactory factory;
+    @Autowired
     private EntityManager manager;
-    private String base = System.getProperty("test_base");
+
+    @Autowired
     private ThumbsDao thumbsDao;
+
+    private String base = System.getProperty("test_base");
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 1000000000);
     private User author;
@@ -28,10 +37,6 @@ public class ThumbsDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        factory = Persistence.createEntityManagerFactory(base);
-        manager = factory.createEntityManager();
-        thumbsDao = new ThumbsDao(manager);
-
         manager.getTransaction().begin();
         testAnswer = new Answer("TestBodyAnswer");
         manager.persist(testAnswer);
@@ -45,16 +50,6 @@ public class ThumbsDaoTest {
         manager.persist(firstThumb);
         manager.persist(secondThumb);
         manager.getTransaction().commit();
-    }
-
-    @After
-    public void tearDown() throws Exception {
-        if (factory != null) {
-            factory.close();
-        }
-        if (manager != null) {
-            manager.close();
-        }
     }
 
     @Test

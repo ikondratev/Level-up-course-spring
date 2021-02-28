@@ -1,18 +1,20 @@
-package com.levelup.dao;
+package com.levelup.web.dao;
 
-import com.levelup.model.Answer;
-import com.levelup.model.Comment;
+import com.levelup.web.model.Answer;
+import com.levelup.web.model.Comment;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import java.util.Date;
 import java.util.List;
 
+@Repository
 public class CommentsDao {
+    @Autowired
     EntityManager manager;
 
-    public CommentsDao(EntityManager manager) {
-        this.manager = manager;
-    }
+    public CommentsDao() { }
 
     public List<Comment> findAll() {
         return manager.createQuery("from Comment", Comment.class)

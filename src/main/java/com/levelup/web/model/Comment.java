@@ -1,15 +1,18 @@
-package com.levelup.model;
+package com.levelup.web.model;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "Likes")
-public class Thumb {
+@Table(name = "Comments")
+public class Comment {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(nullable = false, length = 255)
+    private String body;
 
     @Temporal(TemporalType.DATE)
     private Date created;
@@ -19,9 +22,6 @@ public class Thumb {
 
     @ManyToOne
     private User author;
-
-    public Thumb() {
-    }
 
     public Answer getAnswer() {
         return answer;
@@ -39,12 +39,27 @@ public class Thumb {
         this.author = author;
     }
 
+    public Comment() {
+    }
+
+    public Comment(String body) {
+        this.body = body;
+    }
+
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getBody() {
+        return body;
+    }
+
+    public void setBody(String body) {
+        this.body = body;
     }
 
     public Date getCreated() {

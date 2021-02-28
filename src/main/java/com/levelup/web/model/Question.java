@@ -1,7 +1,6 @@
-package com.levelup.model;
+package com.levelup.web.model;
 
 import javax.persistence.*;
-import javax.swing.*;
 import java.util.Date;
 import java.util.List;
 

@@ -1,33 +1,38 @@
-package com.levelup.dao;
+package com.levelup.web.dao;
 
-import com.levelup.model.User;
-import com.levelup.model.UserStates;
-import org.junit.After;
+import com.levelup.web.model.User;
+import com.levelup.web.model.UserStates;
+import com.levelup.tests.TestConfiguration;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
 
 import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
 
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = TestConfiguration.class)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UsersDaoTest {
-    private EntityManagerFactory factory;
+    @Autowired
     private EntityManager manager;
+
+    @Autowired
     private UsersDao usersDao;
+
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 100000000);
-    private String base = System.getProperty("test_base");
 
     @Before
     public void init() {
-        factory = Persistence.createEntityManagerFactory(base);
-        manager = factory.createEntityManager();
-        usersDao = new UsersDao(manager);
         User testUserFirst = new User("login@first","qwertyFirst",false);
         testUserFirst.setCreated(date);
         testUserFirst.setStatus(UserStates.ACTIVE);
@@ -38,16 +43,6 @@ public class UsersDaoTest {
         manager.persist(testUserFirst);
         manager.persist(testUserSecond);
         manager.getTransaction().commit();
-    }
-
-    @After
-    public void cleanResources() {
-        if (factory != null) {
-            factory.close();
-        }
-        if (manager != null) {
-            manager.close();
-        }
     }
 
     @Test

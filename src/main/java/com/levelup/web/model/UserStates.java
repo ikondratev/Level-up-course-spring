@@ -1,4 +1,4 @@
-package com.levelup.model;
+package com.levelup.web.model;
 
 public enum UserStates {
     UNCONFIRMED,
