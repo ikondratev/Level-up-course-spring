@@ -38,4 +38,10 @@ public class CommentsDao {
                 .setParameter("dateParams", date)
                 .getResultList();
     }
+
+    public void save(Comment comment) {
+        manager.getTransaction().begin();
+        manager.persist(comment);
+        manager.getTransaction().commit();
+    }
 }

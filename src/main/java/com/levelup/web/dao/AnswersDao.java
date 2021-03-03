@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import java.util.Date;
 import java.util.List;
 
@@ -39,5 +40,26 @@ public class AnswersDao {
                 .getResultList();
     }
 
+    public Answer findById(Long id) {
+        try {
+            return manager.createQuery("from Answer where id = :paramId", Answer.class)
+                    .setParameter("paramId", id)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 
+
+    public void save(Answer answer) {
+        manager.getTransaction().begin();
+        manager.persist(answer);
+        manager.getTransaction().commit();
+    }
+
+    public void update(Answer answer) {
+        manager.getTransaction().begin();
+        manager.merge(answer);
+        manager.getTransaction().commit();
+    }
 }

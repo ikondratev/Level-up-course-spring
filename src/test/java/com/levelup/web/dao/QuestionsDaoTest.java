@@ -87,4 +87,33 @@ public class QuestionsDaoTest {
         assertEquals("testSaveTitleQuestion", found.getTitle());
 
     }
+
+    @Test
+    public void findById() {
+        testSaveQuestion = new Question("TestSaveTitle", "TestSaveBodu");
+
+        manager.getTransaction().begin();
+        manager.persist(testSaveQuestion);
+        manager.getTransaction().commit();
+
+        Question found = questionsDao.findById(testSaveQuestion.getId());
+        assertEquals("TestSaveTitle", found.getTitle());
+    }
+
+    @Test
+    public void update() {
+        questionsDao.save(testSaveQuestion);
+        Question found = questionsDao.findByTitle("testSaveTitleQuestion");
+        assertNotNull(found);
+        assertEquals("testSaveTitleQuestion", found.getTitle());
+        assertEquals("testSaveBodyQuestion", found.getBody());
+
+        found.setTitle("ChangedTitleQuestion");
+        questionsDao.update(found);
+        Question updated = questionsDao.findByTitle("ChangedTitleQuestion");
+        assertNotNull(updated);
+        assertEquals("ChangedTitleQuestion", updated.getTitle());
+        assertEquals("testSaveBodyQuestion", updated.getBody());
+        assertEquals(found.getId(), updated.getId());
+    }
 }

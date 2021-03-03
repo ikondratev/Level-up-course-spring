@@ -1,6 +1,7 @@
 package com.levelup.web.model;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,9 +56,13 @@ public class Answer {
     }
 
     public Answer() {
+        this.listOfThumbs = new ArrayList<>();
+        this.listOfComments = new ArrayList<>();
     }
 
     public Answer(String body) {
+        this.listOfThumbs = new ArrayList<>();
+        this.listOfComments = new ArrayList<>();
         this.body = body;
     }
 

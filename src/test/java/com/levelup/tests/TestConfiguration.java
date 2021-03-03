@@ -1,6 +1,8 @@
 package com.levelup.tests;
 
 import com.levelup.web.AppJpaConfiguration;
+import com.levelup.web.Application;
+import com.levelup.web.controller.TestWebConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +15,8 @@ import javax.persistence.PersistenceUnit;
 
 @Configuration
 @ComponentScan(basePackages = "com.levelup" , excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, classes = AppJpaConfiguration.class)
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE,
+                classes = { AppJpaConfiguration.class, Application.class, TestWebConfiguration.class})
 })
 public class TestConfiguration {
     @Bean

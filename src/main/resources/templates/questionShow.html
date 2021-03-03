@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="utf-8">
+    <title th:text="${title}"></title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.5.3/css/bootstrap.css">
+</head>
+<body>
+<div class="container">
+    <h1 th:text="${title}"></h1>
+    <a href="/">Start page</a>
+
+    <table class="table table-striped">
+        <tr>
+            <td th:text="${question.title}"></td>
+            <td th:text="${question.body}"></td>
+        </tr>
+    </table>
+
+    <h3>Answers</h3>
+
+    <table class="common-table">
+        <tbody th:if="${not answers.isEmpty()}">
+        <th:block th:each="answer : ${answers}">
+            <tr>
+                <td th:text="${answer.body}"></td>
+            </tr>
+            <tr><td><hr></td></tr>
+            <tr>
+                <table class="table table-striped">
+                    <tbody th:if="${not answer.getListOfComments().isEmpty()}">
+                    <th:block th:each="comment : ${answer.getListOfComments()}">
+                        <tr>
+                            <td th:text="${comment.body}"></td>
+                        </tr>
+                    </th:block>
+                    </tbody>
+                </table>
+            </tr>
+            <tr>
+                <form th:action="@{/question/{questionId}/{answerId}/add_comment(questionId = ${question.id}, answerId = ${answer.id})}" method="post" th:if="${isLogged}" >
+                    <fieldset>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control input-xlarge" id="bodyComment" name="bodyComment">
+                            </div>
+                            <button type="submit" class="btn btn-primary">comment</button>
+                        </td>
+                    </fieldset>
+                </form>
+            </tr>
+            <tr><td><p><br></p></td></tr>
+        </th:block>
+        </tbody>
+        <tbody th:if="${answers.isEmpty()}">
+        <tr>
+            <td>No Answers found.</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <form th:action="@{/question/{questionId}/add_answer(questionId = ${question.id})}" method="post" th:if="${isLogged}">
+        <fieldset>
+            <div class="form-group">
+                <label class="control-label" for="body">Add new answer</label>
+                <input type="text" class="form-control input-xlarge" id="body" name="answerBody">
+            </div>
+
+            <button type="submit" class="btn btn-primary">Add</button>
+        </fieldset>
+    </form>
+
+</div>
+</body>
+</html>

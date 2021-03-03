@@ -78,4 +78,22 @@ public class CommentsDaoTest {
         List<Comment> emptyList = commentsDao.findByCreatedBefore(dateBefore);
         assertEquals(0, emptyList.size());
     }
+
+    @Test
+    public void save() {
+        Answer testNewAnswer = new Answer("TestFirstBodyAnswer");
+
+        manager.getTransaction().begin();
+        manager.persist(testNewAnswer);
+        manager.getTransaction().commit();
+
+        Comment newComment = new Comment("TestBodyComment");
+        newComment.setAnswer(testNewAnswer);
+        commentsDao.save(newComment);
+
+        List<Comment> foundsList = commentsDao.findByAnswerId(testNewAnswer);
+
+        assertNotNull(foundsList);
+        assertEquals("TestBodyComment", foundsList.get(0).getBody());
+    }
 }

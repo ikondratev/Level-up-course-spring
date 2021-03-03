@@ -47,4 +47,20 @@ public class QuestionsDao {
         manager.persist(question);
         manager.getTransaction().commit();
     }
+
+    public Question findById(Long questionId) {
+        try {
+            return manager.createQuery("from Question where id = :paramId", Question.class)
+                    .setParameter("paramId", questionId)
+                    .getSingleResult();
+        } catch(NoResultException e) {
+            return null;
+        }
+    }
+
+    public void update(Question question) {
+        manager.getTransaction().begin();
+        manager.merge(question);
+        manager.getTransaction().commit();
+    }
 }

@@ -75,4 +75,32 @@ public class AnswersDaoTest {
         List<Answer> emptyList = answersDao.findByCreatedBefore(dateBefore);
         assertEquals(0, emptyList.size());
     }
+
+    @Test
+    public void findById() {
+        Answer testAnswer = new Answer("TestBodyAnswer");
+
+        manager.getTransaction().begin();
+        manager.persist(testAnswer);
+        manager.getTransaction().commit();
+
+        Answer found = answersDao.findById(testAnswer.getId());
+
+        assertEquals("TestBodyAnswer", found.getBody());
+    }
+
+    @Test
+    public void update() {
+        Answer testAnswer = new Answer("TestBodyAnswer");
+        answersDao.save(testAnswer);
+        Answer storedAnswer = answersDao.findById(testAnswer.getId());
+        assertEquals("TestBodyAnswer", storedAnswer.getBody());
+
+        storedAnswer.setBody("ChangerBody");
+        answersDao.update(storedAnswer);
+
+        Answer found = answersDao.findById(storedAnswer.getId());
+        assertEquals("ChangerBody", found.getBody());
+        assertEquals(testAnswer.getId(), found.getId());
+    }
 }

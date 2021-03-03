@@ -3,45 +3,47 @@
 <head>
     <meta charset="utf-8">
     <title th:text="${title}"></title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.5.3/css/bootstrap.css">
 </head>
 <body>
-<h1 th:text="${title}"></h1>
+<div class="container">
+    <h1 th:text="${title}"></h1>
 
-<table>
-    <tbody th:if="${not #lists.isEmpty(questions)}">
-    <th:block th:each="item : ${questions}">
+    <div th:if="${not isLogged}">
+        <a href="/login">Login</a>
+        <!--    <a href="/register">Register</a>-->
+    </div>
+
+    <table class="table table-striped">
+        <tbody th:if="${not questions.isEmpty()}">
+        <th:block th:each="question : ${questions}">
+            <tr>
+                <td th:text="${question.title}"></td>
+                <td><a th:href="@{/question/{questionId}(questionId = ${question.id})}">show</a></td>
+            </tr>
+        </th:block>
+        </tbody>
+        <tbody th:if="${questions.isEmpty()}">
         <tr>
-            <td>Title</td>
-            <td>Body</td>
+            <td>No quetions found.</td>
         </tr>
-        <tr>
-            <td th:text="${item.getTitle()}"></td>
-            <td th:text="${item.getBody()}"></td>
-        </tr>
-    </th:block>
-    </tbody>
-    <tbody th:if="${#lists.isEmpty(questions)}">
-    <tr>
-        <td>No Questions found.</td>
-    </tr>
-    </tbody>
-</table>
+        </tbody>
+    </table>
+    <form action="/add" method="post" th:if="${isAdmin}">
+        <fieldset>
+            <div class="form-group">
+                <label class="control-label" for="title">Title</label>
+                <input type="text" class="form-control input-xlarge" id="title" name="title">
+            </div>
 
-<form action="/add" method="post">
-    <p>
-        <label>
-            Title:
-            <input type="text" name="title">
-        </label>
-        <label>
-            Body:
-            <input type="text" name="body">
-        </label>
-    </p>
-    <p>
-        <input type="submit">
-    </p>
-</form>
+            <div class="form-group">
+                <label class="control-label" for="body">Text</label>
+                <input type="text" class="form-control input-xlarge" id="body" name="body">
+            </div>
 
+            <button type="submit" class="btn btn-primary">Create</button>
+        </fieldset>
+    </form>
+</div>
 </body>
 </html>
