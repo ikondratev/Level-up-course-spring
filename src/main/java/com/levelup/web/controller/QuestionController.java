@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @SessionAttributes("user-session")
@@ -38,7 +39,7 @@ public class QuestionController {
         if (question != null) {
             model.addAttribute("title", "Question: " + questionId);
             model.addAttribute("question", question);
-            model.addAttribute("answers",  question.getListOfAnswer());
+            model.addAttribute("answers", question.getListOfAnswer());
             model.addAttribute("isLogged", isLogged);
             return "questionShow";
         } else {
@@ -58,9 +59,9 @@ public class QuestionController {
         List<Answer> answersList;
         boolean isLogged = userSession.isAdmin();
         Question question = questionService.findById(Long.parseLong(questionId));
-        Answer newAnswer = answerService.createAnswer(answerBody, question);
 
-        if (question != null && newAnswer != null) {
+        if (question != null) {
+            Answer newAnswer = answerService.createAnswer(answerBody, question);
             answersList = question.getListOfAnswer();
             answersList.add(newAnswer);
             question.setListOfAnswer(answersList);
@@ -86,12 +87,12 @@ public class QuestionController {
     ) {
         boolean isLogged = userSession.isAdmin();
         Question question = questionService.findById(Long.parseLong(questionId));
-        Comment comment = commentService.addComment(answerId, bodyComment);
 
-        if (comment != null) {
+        if (question != null) {
+            Comment comment = commentService.addComment(answerId, bodyComment);
             model.addAttribute("title", "Question: " + questionId);
             model.addAttribute("question", question);
-            model.addAttribute("answers",  question.getListOfAnswer());
+            model.addAttribute("answers", question.getListOfAnswer());
             model.addAttribute("isLogged", isLogged);
             return "questionShow";
         } else {

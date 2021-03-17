@@ -1,4 +1,4 @@
-package com.levelup.web.dao;
+package com.levelup.web.repo;
 
 import com.levelup.web.model.Answer;
 import com.levelup.web.model.Thumb;
@@ -22,12 +22,12 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class ThumbsDaoTest {
+public class ThumbsRepositoryTest {
     @Autowired
     private EntityManager manager;
 
     @Autowired
-    private ThumbsDao thumbsDao;
+    private ThumbsRepository thumbsRepository;
 
     private String base = System.getProperty("test_base");
     private Date date = new Date();
@@ -54,26 +54,26 @@ public class ThumbsDaoTest {
 
     @Test
     public void findAll() {
-        assertEquals(2, thumbsDao.findAll().size());
+        assertEquals(2, thumbsRepository.findAll().size());
     }
 
     @Test
     public void findByAuthor() {
-        List<Thumb> foundThumbsList = thumbsDao.findByAuthor(author);
+        List<Thumb> foundThumbsList = thumbsRepository.findByAuthorId(author.getId());
         assertEquals(2, foundThumbsList.size());
 
         User wrongAuthor = new User("wrongLogin", "wrongPassword", false);
-        List<Thumb> emptyList = thumbsDao.findByAuthor(wrongAuthor);
+        List<Thumb> emptyList = thumbsRepository.findByAuthorId(wrongAuthor.getId());
         assertEquals(0, emptyList.size());
     }
 
     @Test
     public void findByAnswer() {
-        List<Thumb> foundThumbsList = thumbsDao.findByAnswer(testAnswer);
+        List<Thumb> foundThumbsList = thumbsRepository.findByAnswerId(testAnswer.getId());
         assertEquals(1, foundThumbsList.size());
 
         Answer wrongAnswer = new Answer("WrongBodyAnswer");
-        List<Thumb> emptyList = thumbsDao.findByAnswer(wrongAnswer);
+        List<Thumb> emptyList = thumbsRepository.findByAnswerId(wrongAnswer.getId());
         assertEquals(0, emptyList.size());
     }
 }

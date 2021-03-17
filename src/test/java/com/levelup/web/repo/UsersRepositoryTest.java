@@ -1,4 +1,4 @@
-package com.levelup.web.dao;
+package com.levelup.web.repo;
 
 import com.levelup.web.model.User;
 import com.levelup.web.model.UserStates;
@@ -21,12 +21,12 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class UsersDaoTest {
+public class UsersRepositoryTest {
     @Autowired
     private EntityManager manager;
 
     @Autowired
-    private UsersDao usersDao;
+    private UsersRepository usersRepository;
 
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 100000000);
@@ -47,53 +47,53 @@ public class UsersDaoTest {
 
     @Test
     public void findByLogin() {
-        assertNull(usersDao.findByLogin("wrong@test@user@login"));
-        User userFound = usersDao.findByLogin("login@first");
+        assertNull(usersRepository.findByLogin("wrong@test@user@login"));
+        User userFound = usersRepository.findByLogin("login@first").get(0);
         assertNotNull(userFound);
         assertEquals("login@first", userFound.getLogin());
     }
 
     @Test
     public void findAll() {
-        assertEquals(usersDao.findAll().size(), 2);
+        assertEquals(usersRepository.findAll().size(), 2);
     }
 
     @Test
     public void findByLoginAndPassword() {
-        assertNull(usersDao.findByLoginAndPassword("wrongTest", "wrongPass"));
-        User userFound = usersDao.findByLoginAndPassword("login@first", "qwertyFirst");
+        assertNull(usersRepository.findByLoginAndPassword("wrongTest", "wrongPass"));
+        User userFound = usersRepository.findByLoginAndPassword("login@first", "qwertyFirst").get(0);
         assertNotNull(userFound);
         assertEquals("login@first", userFound.getLogin());
     }
 
     @Test
     public void findByIsAdmin() {
-        List<User> isAdminUsers = usersDao.findByIsAdmin(true);
+        List<User> isAdminUsers = usersRepository.findByIsAdmin(true);
         assertEquals(isAdminUsers.size(), 1);
         assertEquals(isAdminUsers.get(0).getLogin(), "login@second");
 
-        List<User> notAdminUsers = usersDao.findByIsAdmin(false);
+        List<User> notAdminUsers = usersRepository.findByIsAdmin(false);
         assertEquals(notAdminUsers.size(), 1);
         assertEquals(notAdminUsers.get(0).getLogin(), "login@first");
     }
 
     @Test
     public void testFindByCreatedBefore() {
-        List<User> nowCreatedUserList = usersDao.findByCreatedBefore(date);
+        List<User> nowCreatedUserList = usersRepository.findByCreatedIsLessThanEqual(date);
         assertEquals( "login@first", nowCreatedUserList.get(0).getLogin());
         assertEquals(1, nowCreatedUserList.size());
 
-        List<User> beforeCreatedUserList = usersDao.findByCreatedBefore(dateBefore);
+        List<User> beforeCreatedUserList = usersRepository.findByCreatedIsLessThanEqual(dateBefore);
         assertEquals(0, beforeCreatedUserList.size());
     }
 
     @Test
     public void findByStates() {
-        List<User> activeList = usersDao.findByStates(UserStates.ACTIVE);
+        List<User> activeList = usersRepository.findByStatus(UserStates.ACTIVE);
         assertEquals(1, activeList.size());
         assertEquals("login@first", activeList.get(0).getLogin());
 
-        List<User> bannedList = usersDao.findByStates(UserStates.BANNED);
+        List<User> bannedList = usersRepository.findByStatus(UserStates.BANNED);
         assertEquals(1, bannedList.size());
         assertEquals("login@second", bannedList.get(0).getLogin());
     }

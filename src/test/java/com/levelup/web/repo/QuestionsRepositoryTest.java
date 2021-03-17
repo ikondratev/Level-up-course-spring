@@ -1,4 +1,4 @@
-package com.levelup.web.dao;
+package com.levelup.web.repo;
 
 import com.levelup.web.model.Question;
 import com.levelup.web.model.User;
@@ -21,12 +21,12 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class QuestionsDaoTest {
+public class QuestionsRepositoryTest {
     @Autowired
     private EntityManager manager;
 
     @Autowired
-    private QuestionsDao questionsDao;
+    private QuestionsRepository questionsRepository;
 
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 100000000);
@@ -53,67 +53,38 @@ public class QuestionsDaoTest {
 
     @Test
     public void findAll() {
-        assertEquals(questionsDao.findAll().size(), 2);
+        assertEquals(questionsRepository.findAll().size(), 2);
     }
 
     @Test
     public void findByTitle() {
-        assertNull(questionsDao.findByTitle("WrongTitle"));
-        Question foundQuestion = questionsDao.findByTitle("TestTitleFirst");
+        assertNull(questionsRepository.findByTitle("WrongTitle"));
+        Question foundQuestion = questionsRepository.findByTitle("TestTitleFirst");
         assertNotNull(foundQuestion);
         assertEquals("TestTitleFirst", foundQuestion.getTitle());
     }
 
     @Test
     public void findByAuthor() {
-        List<Question> wrongAuthorList = questionsDao.findByAuthor("wrongAuthorLogin");
+        List<Question> wrongAuthorList = questionsRepository.findByAuthorLogin("wrongAuthorLogin");
         assertEquals(0, wrongAuthorList.size());
-        List<Question> foundAuthorsList = questionsDao.findByAuthor("loginFirst");
+        List<Question> foundAuthorsList = questionsRepository.findByAuthorLogin("loginFirst");
         assertEquals( "TestTitleFirst", foundAuthorsList.get(0).getTitle());
     }
 
     @Test
     public void testFindByDateBefore() {
-        assertEquals(1, questionsDao.findByDateBefore(date).size());
-        assertEquals("TestTitleFirst", questionsDao.findByDateBefore(date).get(0).getTitle());
-        assertEquals(0, questionsDao.findByDateBefore(dateBefore).size());
+        assertEquals(1, questionsRepository.findByCreatedIsLessThanEqual(date).size());
+        assertEquals("TestTitleFirst", questionsRepository.findByCreatedIsLessThanEqual(date).get(0).getTitle());
+        assertEquals(0, questionsRepository.findByCreatedIsLessThanEqual(dateBefore).size());
     }
 
     @Test
     public void saveQuestion() {
-        questionsDao.save(testSaveQuestion);
-        Question found = questionsDao.findByTitle("testSaveTitleQuestion");
+        questionsRepository.save(testSaveQuestion);
+        Question found = questionsRepository.findByTitle("testSaveTitleQuestion");
         assertNotNull(found);
         assertEquals("testSaveTitleQuestion", found.getTitle());
 
-    }
-
-    @Test
-    public void findById() {
-        testSaveQuestion = new Question("TestSaveTitle", "TestSaveBodu");
-
-        manager.getTransaction().begin();
-        manager.persist(testSaveQuestion);
-        manager.getTransaction().commit();
-
-        Question found = questionsDao.findById(testSaveQuestion.getId());
-        assertEquals("TestSaveTitle", found.getTitle());
-    }
-
-    @Test
-    public void update() {
-        questionsDao.save(testSaveQuestion);
-        Question found = questionsDao.findByTitle("testSaveTitleQuestion");
-        assertNotNull(found);
-        assertEquals("testSaveTitleQuestion", found.getTitle());
-        assertEquals("testSaveBodyQuestion", found.getBody());
-
-        found.setTitle("ChangedTitleQuestion");
-        questionsDao.update(found);
-        Question updated = questionsDao.findByTitle("ChangedTitleQuestion");
-        assertNotNull(updated);
-        assertEquals("ChangedTitleQuestion", updated.getTitle());
-        assertEquals("testSaveBodyQuestion", updated.getBody());
-        assertEquals(found.getId(), updated.getId());
     }
 }

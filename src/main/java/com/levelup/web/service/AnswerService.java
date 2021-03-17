@@ -1,9 +1,8 @@
 package com.levelup.web.service;
 
-import com.levelup.web.dao.AnswersDao;
-import com.levelup.web.dao.CommentsDao;
+import com.levelup.web.repo.AnswersRepository;
+import com.levelup.web.repo.CommentsRepository;
 import com.levelup.web.model.Answer;
-import com.levelup.web.model.Comment;
 import com.levelup.web.model.Question;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,10 +12,10 @@ import java.util.Date;
 @Service
 public class AnswerService {
     @Autowired
-    private AnswersDao answersDao;
+    private AnswersRepository answersRepository;
 
     @Autowired
-    private CommentsDao commentsDao;
+    private CommentsRepository commentsRepository;
 
     public Answer createAnswer(String body, Question question) {
         Answer newAnswer = new Answer(body);
@@ -26,7 +25,7 @@ public class AnswerService {
         newAnswer.setCreated(now);
 
         try {
-            answersDao.save(newAnswer);
+            answersRepository.save(newAnswer);
             return newAnswer;
         } catch (Exception e) {
             return null;
