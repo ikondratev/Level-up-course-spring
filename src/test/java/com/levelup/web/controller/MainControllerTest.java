@@ -1,6 +1,7 @@
 package com.levelup.web.controller;
 
 import com.levelup.web.model.Question;
+import com.levelup.web.service.AnswerService;
 import com.levelup.web.service.QuestionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,6 +31,12 @@ public class MainControllerTest {
 
     @MockBean
     private QuestionService questionService;
+
+    @MockBean
+    private CommentService commentService;
+
+    @MockBean
+    private AnswerService answerService;
 
     @Test
     public void testNullQuestions() throws Exception {
