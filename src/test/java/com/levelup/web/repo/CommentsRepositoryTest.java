@@ -8,9 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -22,12 +24,17 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@SpringBootTest
+@Transactional
 public class CommentsRepositoryTest {
     @Autowired
-    private EntityManager manager;
+    private CommentsRepository commentsRepository;
 
     @Autowired
-    private CommentsRepository commentsRepository;
+    private AnswersRepository answersRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 100000000);
@@ -35,20 +42,18 @@ public class CommentsRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        manager.getTransaction().begin();
         testAnswer = new Answer("testBodyAnswer");
         User author = new User("testLoginUser", "testPasswordUser", false);
-        manager.persist(testAnswer);
-        manager.persist(author);
+        usersRepository.save(author);
+        answersRepository.save(testAnswer);
         Comment firstComment = new Comment("FirstTestBodyComment");
         Comment secondComment = new Comment("SecondTestBodyComment");
         firstComment.setAuthor(author);
         firstComment.setAnswer(testAnswer);
         firstComment.setCreated(date);
         secondComment.setAnswer(testAnswer);
-        manager.persist(firstComment);
-        manager.persist(secondComment);
-        manager.getTransaction().commit();
+        commentsRepository.save(firstComment);
+        commentsRepository.save(secondComment);
     }
 
     @Test
@@ -72,23 +77,5 @@ public class CommentsRepositoryTest {
 
         List<Comment> emptyList = commentsRepository.findByCreatedIsLessThanEqual(dateBefore);
         assertEquals(0, emptyList.size());
-    }
-
-    @Test
-    public void save() {
-        Answer testNewAnswer = new Answer("TestFirstBodyAnswer");
-
-        manager.getTransaction().begin();
-        manager.persist(testNewAnswer);
-        manager.getTransaction().commit();
-
-        Comment newComment = new Comment("TestBodyComment");
-        newComment.setAnswer(testNewAnswer);
-        commentsRepository.save(newComment);
-
-        List<Comment> foundsList = commentsRepository.findByAnswerId(testNewAnswer.getId());
-
-        assertNotNull(foundsList);
-        assertEquals("TestBodyComment", foundsList.get(0).getBody());
     }
 }

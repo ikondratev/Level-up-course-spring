@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -21,12 +23,15 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@SpringBootTest
+@Transactional
 public class QuestionsRepositoryTest {
-    @Autowired
-    private EntityManager manager;
 
     @Autowired
     private QuestionsRepository questionsRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
 
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 100000000);
@@ -41,19 +46,12 @@ public class QuestionsRepositoryTest {
         Question questionSecond = new Question("TestTitleSecond ", "TestBodySecond");
         testSaveQuestion = new Question("testSaveTitleQuestion", "testSaveBodyQuestion");
 
-        manager.getTransaction().begin();
-        manager.persist(authorFirst);
-        manager.persist(authorSecond);
+        usersRepository.save(authorFirst);
+        usersRepository.save(authorSecond);
         questionFirst.setAuthor(authorFirst);
         questionSecond.setAuthor(authorSecond);
-        manager.persist(questionFirst);
-        manager.persist(questionSecond);
-        manager.getTransaction().commit();
-    }
-
-    @Test
-    public void findAll() {
-        assertEquals(questionsRepository.findAll().size(), 2);
+        questionsRepository.save(questionFirst);
+        questionsRepository.save(questionSecond);
     }
 
     @Test

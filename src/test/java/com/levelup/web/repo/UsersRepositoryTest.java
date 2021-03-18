@@ -7,9 +7,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -21,10 +23,9 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@SpringBootTest
+@Transactional
 public class UsersRepositoryTest {
-    @Autowired
-    private EntityManager manager;
-
     @Autowired
     private UsersRepository usersRepository;
 
@@ -39,28 +40,21 @@ public class UsersRepositoryTest {
         User testUserSecond = new User("login@second","qwertySecond",true);
         testUserSecond.setStatus(UserStates.BANNED);
 
-        manager.getTransaction().begin();
-        manager.persist(testUserFirst);
-        manager.persist(testUserSecond);
-        manager.getTransaction().commit();
+        usersRepository.save(testUserFirst);
+        usersRepository.save(testUserSecond);
     }
 
     @Test
     public void findByLogin() {
-        assertNull(usersRepository.findByLogin("wrong@test@user@login"));
+        assertEquals(0, usersRepository.findByLogin("wrong@test@user@login").size());
         User userFound = usersRepository.findByLogin("login@first").get(0);
         assertNotNull(userFound);
         assertEquals("login@first", userFound.getLogin());
     }
 
     @Test
-    public void findAll() {
-        assertEquals(usersRepository.findAll().size(), 2);
-    }
-
-    @Test
     public void findByLoginAndPassword() {
-        assertNull(usersRepository.findByLoginAndPassword("wrongTest", "wrongPass"));
+        assertEquals(0, usersRepository.findByLoginAndPassword("wrongTest", "wrongPass").size());
         User userFound = usersRepository.findByLoginAndPassword("login@first", "qwertyFirst").get(0);
         assertNotNull(userFound);
         assertEquals("login@first", userFound.getLogin());

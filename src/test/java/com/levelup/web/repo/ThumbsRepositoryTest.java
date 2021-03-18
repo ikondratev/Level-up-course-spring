@@ -8,9 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -22,14 +24,18 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
+@SpringBootTest
+@Transactional
 public class ThumbsRepositoryTest {
-    @Autowired
-    private EntityManager manager;
-
     @Autowired
     private ThumbsRepository thumbsRepository;
 
-    private String base = System.getProperty("test_base");
+    @Autowired
+    private AnswersRepository answersRepository;
+
+    @Autowired
+    private UsersRepository usersRepository;
+
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 1000000000);
     private User author;
@@ -37,24 +43,17 @@ public class ThumbsRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        manager.getTransaction().begin();
         testAnswer = new Answer("TestBodyAnswer");
-        manager.persist(testAnswer);
+        answersRepository.save(testAnswer);
         author = new User("testLoginUser", "testPassUser", false);
-        manager.persist(author);
+        usersRepository.save(author);
         Thumb firstThumb = new Thumb();
         Thumb secondThumb = new Thumb();
         firstThumb.setAuthor(author);
         secondThumb.setAuthor(author);
         firstThumb.setAnswer(testAnswer);
-        manager.persist(firstThumb);
-        manager.persist(secondThumb);
-        manager.getTransaction().commit();
-    }
-
-    @Test
-    public void findAll() {
-        assertEquals(2, thumbsRepository.findAll().size());
+        thumbsRepository.save(firstThumb);
+        thumbsRepository.save(secondThumb);
     }
 
     @Test
