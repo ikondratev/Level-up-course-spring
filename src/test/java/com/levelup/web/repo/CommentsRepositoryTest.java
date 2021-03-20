@@ -43,7 +43,7 @@ public class CommentsRepositoryTest {
     @Before
     public void setUp() throws Exception {
         testAnswer = new Answer("testBodyAnswer");
-        User author = new User("testLoginUser", "testPasswordUser", false);
+        User author = new User("testLogin@user.com", "testPasswordUser", false);
         usersRepository.save(author);
         answersRepository.save(testAnswer);
         Comment firstComment = new Comment("FirstTestBodyComment");
@@ -58,7 +58,7 @@ public class CommentsRepositoryTest {
 
     @Test
     public void findByAuthor() {
-        List<Comment> foundCommentsList = commentsRepository.findByAuthorLogin("testLoginUser");
+        List<Comment> foundCommentsList = commentsRepository.findByAuthorLogin("testLogin@user.com");
         assertEquals(1, foundCommentsList.size());
         assertEquals("FirstTestBodyComment", foundCommentsList.get(0).getBody());
     }

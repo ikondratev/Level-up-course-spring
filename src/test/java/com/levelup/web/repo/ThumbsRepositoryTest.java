@@ -45,7 +45,7 @@ public class ThumbsRepositoryTest {
     public void setUp() throws Exception {
         testAnswer = new Answer("TestBodyAnswer");
         answersRepository.save(testAnswer);
-        author = new User("testLoginUser", "testPassUser", false);
+        author = new User("test@ogin.com", "testPassUser", false);
         usersRepository.save(author);
         Thumb firstThumb = new Thumb();
         Thumb secondThumb = new Thumb();
@@ -61,7 +61,7 @@ public class ThumbsRepositoryTest {
         List<Thumb> foundThumbsList = thumbsRepository.findByAuthorId(author.getId());
         assertEquals(2, foundThumbsList.size());
 
-        User wrongAuthor = new User("wrongLogin", "wrongPassword", false);
+        User wrongAuthor = new User("wrong@login.com", "wrongPassword", false);
         List<Thumb> emptyList = thumbsRepository.findByAuthorId(wrongAuthor.getId());
         assertEquals(0, emptyList.size());
     }

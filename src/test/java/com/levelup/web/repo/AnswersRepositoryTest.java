@@ -44,7 +44,7 @@ public class AnswersRepositoryTest {
     public void setUp() {
         Question question = new Question("TestTitle", "TestBody");
         questionsRepository.save(question);
-        User author = new User("testLogin", "testPasswoerd", false);
+        User author = new User("test@ogin.com", "testPasswoerd", false);
         usersRepository.save(author);
         Answer firstAnswer = new Answer("TestAnswerBodyFirst");
         Answer secondAnswer = new Answer("TestAnswerBodySecond");
@@ -58,13 +58,20 @@ public class AnswersRepositoryTest {
 
     @Test
     public void findByAuthor() {
-        assertEquals(0, answersRepository.findByAuthorLogin("wrongLogin").size());
-        assertEquals("TestAnswerBodyFirst", answersRepository.findByAuthorLogin("testLogin").get(0).getBody());
+        assertEquals(0, answersRepository
+                .findByAuthorLogin("wrongLogin")
+                .size());
+        assertEquals("TestAnswerBodyFirst", answersRepository
+                .findByAuthorLogin("test@ogin.com")
+                .get(0)
+                .getBody());
     }
 
     @Test
     public void findByQuestion() {
-        assertEquals(2, answersRepository.findByQuestionTitle("TestTitle").size());
+        assertEquals(2, answersRepository
+                .findByQuestionTitle("TestTitle")
+                .size());
     }
 
     @Test

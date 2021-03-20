@@ -39,8 +39,8 @@ public class QuestionsRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        User authorFirst = new User("loginFirst", "passFirst", false);
-        User authorSecond = new User("loginSecond", "passSecond", false);
+        User authorFirst = new User("login@first.com", "passFirst", false);
+        User authorSecond = new User("login@second.com", "passSecond", false);
         Question questionFirst = new Question("TestTitleFirst", "TestBodyFirst");
         questionFirst.setCreated(date);
         Question questionSecond = new Question("TestTitleSecond ", "TestBodySecond");
@@ -66,7 +66,7 @@ public class QuestionsRepositoryTest {
     public void findByAuthor() {
         List<Question> wrongAuthorList = questionsRepository.findByAuthorLogin("wrongAuthorLogin");
         assertEquals(0, wrongAuthorList.size());
-        List<Question> foundAuthorsList = questionsRepository.findByAuthorLogin("loginFirst");
+        List<Question> foundAuthorsList = questionsRepository.findByAuthorLogin("login@first.com");
         assertEquals( "TestTitleFirst", foundAuthorsList.get(0).getTitle());
     }
 

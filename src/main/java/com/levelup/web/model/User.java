@@ -1,6 +1,8 @@
 package com.levelup.web.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 
@@ -12,10 +14,13 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, unique = true, length = 25)
+    @NotEmpty(message = "user's login can't be empty")
+    @Email(message = "format must be in format: ****@***.***")
     private String login;
 
     @Column(nullable = false, length = 50)
+    @NotEmpty(message = "password can't be blank")
     private String password;
 
     @Enumerated(EnumType.STRING)
