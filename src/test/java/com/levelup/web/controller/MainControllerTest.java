@@ -2,6 +2,7 @@ package com.levelup.web.controller;
 
 import com.levelup.web.model.Question;
 import com.levelup.web.service.AnswerService;
+import com.levelup.web.service.CommentService;
 import com.levelup.web.service.QuestionService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,7 +18,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -75,24 +75,4 @@ public class MainControllerTest {
                 .andExpect(model().attribute("isLogged", false))
                 .andExpect(model().attribute("questions", expectQuestionsList));
     }
-
-    @Test
-    public void testAddQuestionLoggedAsAdmin() throws Exception {
-        Question question = new Question("Test title question", "Test body question");
-        Mockito.when(questionService.save("Test title question", "Test body question"))
-                        .thenReturn(question);
-        UserSession session = new UserSession("admoin", true);
-
-        mvc.perform(post("/add")
-                .param("title", "Test title question")
-                .param("body", "Test body question")
-                .sessionAttr("user-session", session)
-                )
-                .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Test title question"));
-
-        Mockito.verify(questionService, Mockito.atLeast(1))
-                .save("Test title question", "Test body question");
-    }
-
 }

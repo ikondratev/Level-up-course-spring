@@ -1,4 +1,4 @@
-package com.levelup.web.controller;
+package com.levelup.web.service;
 
 import com.levelup.web.repo.AnswersRepository;
 import com.levelup.web.repo.CommentsRepository;
