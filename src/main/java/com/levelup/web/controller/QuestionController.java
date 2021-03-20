@@ -1,5 +1,6 @@
 package com.levelup.web.controller;
 
+import com.levelup.web.controller.partial.AddQuestionForm;
 import com.levelup.web.model.Answer;
 import com.levelup.web.model.Comment;
 import com.levelup.web.model.Question;
@@ -8,11 +9,12 @@ import com.levelup.web.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @SessionAttributes("user-session")
@@ -26,6 +28,44 @@ public class QuestionController {
 
     @Autowired
     private CommentService commentService;
+
+    @GetMapping("/question/add")
+    public String viewFormQuestion(
+            Model model,
+            @ModelAttribute("questionForm") AddQuestionForm questionForm,
+            BindingResult bindingResult
+    ) {
+        return "addQuestion";
+    }
+
+    @PostMapping("/question/add")
+    public String addQuestion(
+            Model model,
+            @Valid @ModelAttribute("questionForm") AddQuestionForm questionForm,
+            BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            return "addQuestion";
+        }
+
+        Question addedQuestion;
+
+        try {
+            addedQuestion = questionService.save(questionForm.getTitle(), questionForm.getBody());
+        } catch (Throwable e) {
+            bindingResult.addError(
+                    new FieldError(
+                            "form",
+                            "title",
+                            "body"
+                    )
+            );
+            return "addQuestion";
+        }
+
+        model.addAttribute("title", addedQuestion.getTitle());
+        return "questionAdded";
+    }
 
     @GetMapping("/question/{questionId}")
     public String showQuestion(

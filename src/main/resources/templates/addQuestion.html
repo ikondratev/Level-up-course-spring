@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<form action="/question/add" method="post" th:object="${questionForm}">
+    <p>
+        <label>
+            Title:
+            <input type="text" th:field="*{title}">
+        </label>
+
+        <span th:if="${#fields.hasErrors('title')}"
+              th:errors="*{}"></span>
+    </p>
+    <p>
+        <label>
+            Question:
+            <input type="text" th:field="*{body}">
+        </label>
+
+        <span th:if="${#fields.hasErrors('body')}"
+              th:errors="*{body}"></span>
+    </p>
+
+    <p>
+        <input type="submit">
+    </p>
+</form>
+</body>
+</html>

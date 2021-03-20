@@ -29,21 +29,8 @@
         </tr>
         </tbody>
     </table>
-    <form action="/add" method="post" th:if="${isAdmin}">
-        <fieldset>
-            <div class="form-group">
-                <label class="control-label" for="title">Title</label>
-                <input type="text" class="form-control input-xlarge" id="title" name="title">
-            </div>
 
-            <div class="form-group">
-                <label class="control-label" for="body">Text</label>
-                <input type="text" class="form-control input-xlarge" id="body" name="body">
-            </div>
-
-            <button type="submit" class="btn btn-primary">Create</button>
-        </fieldset>
-    </form>
+    <a href="/question/add" th:if="${isAdmin}">Add new question...</a>
 </div>
 </body>
 </html>

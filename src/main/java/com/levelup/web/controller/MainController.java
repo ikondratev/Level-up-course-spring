@@ -36,23 +36,6 @@ public class MainController {
         return "index";
     }
 
-    @PostMapping("/add")
-    public String addQuestion(
-            Model model,
-            @RequestParam String title,
-            @RequestParam String body
-    ) {
-        Question newQuestion = questionService.save(title, body);
-        model.addAttribute("title", title);
-
-        if (newQuestion != null) {
-            return "questionAdded";
-        } else {
-            model.addAttribute("error", "question_not_created");
-            return "questionError";
-        }
-    }
-
     @ModelAttribute("user-session")
     public UserSession createUserSession() {
         return new UserSession();
