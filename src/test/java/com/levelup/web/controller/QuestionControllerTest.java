@@ -6,6 +6,7 @@ import com.levelup.web.model.Question;
 import com.levelup.web.service.AnswerService;
 import com.levelup.web.service.CommentService;
 import com.levelup.web.service.QuestionService;
+import com.levelup.web.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -20,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -40,8 +42,11 @@ public class QuestionControllerTest {
     @MockBean
     private CommentService commentService;
 
+    @MockBean
+    private UserService userService;
+
     @Test
-    public void showQuestionLoggedAsAdmin() throws Exception {
+    public void showQuestion() throws Exception {
         Question testQuestion = new Question("Question: 1", "testBodyQuestion");
         Mockito.when(questionService.findById(1L)).thenReturn(testQuestion);
 
@@ -57,14 +62,34 @@ public class QuestionControllerTest {
     }
 
     @Test
-    public void testAddQuestionLoggedAsAdmin() throws Exception {
+    public void showQuestionLoggedAsAdmin() throws Exception {
+        Question testQuestion = new Question("Question: 1", "testBodyQuestion");
+        Mockito.when(questionService.findById(1L)).thenReturn(testQuestion);
+
+
+        mvc.perform(get("/question/{questionId}", 1L)
+                .with(user("admin")
+                        .roles("ADMIN"))
+                )
+                .andExpect(status().isOk())
+                .andExpect(model().attribute("title", "Question: 1"))
+                .andExpect(model().attribute("question", testQuestion))
+                .andExpect(model().attribute("answers", Collections.emptyList()));
+
+        Mockito.verify(questionService, Mockito.atLeast(1))
+                .findById(1L);
+    }
+
+    @Test
+    public void addQuestionLoggedAsAdmin() throws Exception {
         Question question = new Question("Test title question", "Test body question");
         Mockito.when(questionService.save("Test title question", "Test body question"))
                 .thenReturn(question);
 
-        mvc.perform(post("/question/add")
+        mvc.perform(post("/question/add").with(user("admin").roles("ADMIN"))
                 .param("title", "Test title question")
                 .param("body", "Test body question")
+                .with(csrf())
         )
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Test title question"));

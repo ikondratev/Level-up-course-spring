@@ -5,6 +5,7 @@ import com.levelup.web.model.Question;
 import com.levelup.web.service.AnswerService;
 import com.levelup.web.service.CommentService;
 import com.levelup.web.service.QuestionService;
+import com.levelup.web.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -18,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +40,9 @@ public class AnswerControllerTest {
     @MockBean
     private CommentService commentService;
 
+    @MockBean
+    private UserService userService;
+
 
     @Test
     public void addAnswer() throws Exception {
@@ -52,7 +57,9 @@ public class AnswerControllerTest {
         Mockito.when(answerService.createAnswer("TestBodyAnswer", testQuestion)).thenReturn(testAnswer);
 
         mvc.perform(post("/question/{questionId}/add_answer", 1L)
+                .with(user("admin").roles("ADMIN"))
                 .param("answerBody", "TestBodyAnswer")
+                .with(csrf())
         )
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Question: 1"))

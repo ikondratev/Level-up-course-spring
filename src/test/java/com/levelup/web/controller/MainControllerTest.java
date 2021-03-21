@@ -1,9 +1,11 @@
 package com.levelup.web.controller;
 
 import com.levelup.web.model.Question;
+import com.levelup.web.repo.UsersRepository;
 import com.levelup.web.service.AnswerService;
 import com.levelup.web.service.CommentService;
 import com.levelup.web.service.QuestionService;
+import com.levelup.web.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -18,6 +20,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -28,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class MainControllerTest {
     @Autowired
     private MockMvc mvc;
+
+    @MockBean
+    private UserService userService;
 
     @MockBean
     private QuestionService questionService;
@@ -42,16 +48,17 @@ public class MainControllerTest {
     public void testNullQuestions() throws Exception {
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Holla!"))
+                .andExpect(model().attribute("title", "Hello anonymous!"))
                 .andExpect(model().attribute("questions", Collections.emptyList()));
     }
 
     @Test
     public void testNullQuestionsLogedAsAdmin() throws Exception {
 
-        mvc.perform(get("/"))
+        mvc.perform(get("/").with(user("admin").roles("ADMIN")))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Holla!"))
+                .andExpect(model().attribute("title", "Hello admin!"))
+                .andExpect(model().attribute("isLogged", true))
                 .andExpect(model().attribute("questions", Collections.emptyList()));
     }
 
@@ -65,7 +72,7 @@ public class MainControllerTest {
 
         mvc.perform(get("/"))
                 .andExpect(status().isOk())
-                .andExpect(model().attribute("title", "Holla!"))
+                .andExpect(model().attribute("title", "Hello anonymous!"))
                 .andExpect(model().attribute("questions", expectQuestionsList));
     }
 }

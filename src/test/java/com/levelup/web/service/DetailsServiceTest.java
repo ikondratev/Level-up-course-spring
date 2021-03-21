@@ -20,7 +20,7 @@ import static org.junit.Assert.*;
 @ContextConfiguration(classes = DetailsService.class)
 public class DetailsServiceTest {
     @MockBean
-    private UsersRepository usersRepository;
+    private UserService userService;
 
     @MockBean
     private PasswordEncoder encoder;
@@ -52,7 +52,7 @@ public class DetailsServiceTest {
                 "encryptedPassword",
                 UserRoles.USER);
 
-        Mockito.when(usersRepository.findByLogin(user.getLogin())).thenReturn(user);
+        Mockito.when(userService.findByLogin(user.getLogin())).thenReturn(user);
 
         UserDetails expected = User.withUsername(user.getLogin())
                 .password(user.getPassPhrase())

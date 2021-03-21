@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class DetailsService implements UserDetailsService {
     @Autowired
-    private UsersRepository usersRepository;
+    private UserService userService;
 
     @Autowired
     private PasswordEncoder encoder;
@@ -26,7 +26,7 @@ public class DetailsService implements UserDetailsService {
                     .build();
         }
 
-        com.levelup.web.model.User foundedUser = usersRepository.findByLogin(userName);
+        com.levelup.web.model.User foundedUser = userService.findByLogin(userName);
         if (foundedUser == null) {
             throw new UsernameNotFoundException("User" + userName + "not found");
         }

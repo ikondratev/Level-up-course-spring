@@ -6,6 +6,7 @@ import com.levelup.web.model.Question;
 import com.levelup.web.service.AnswerService;
 import com.levelup.web.service.CommentService;
 import com.levelup.web.service.QuestionService;
+import com.levelup.web.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -20,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,6 +42,9 @@ public class CommentControllerTest {
 
     @MockBean
     private AnswerService answerService;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     public void addComment() throws Exception {
@@ -61,7 +67,9 @@ public class CommentControllerTest {
         ).thenReturn(testComment);
 
         mvc.perform(post("/question/{questionId}/{answerId}/add_comment", 1L, 2L)
+                .with(user("admin").roles("ADMIN"))
                 .param("bodyComment", "testBodyComment")
+                .with(csrf())
 
         ).andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Question: 1"))
