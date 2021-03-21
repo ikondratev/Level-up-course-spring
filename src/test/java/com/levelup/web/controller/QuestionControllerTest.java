@@ -61,7 +61,6 @@ public class QuestionControllerTest {
         Question question = new Question("Test title question", "Test body question");
         Mockito.when(questionService.save("Test title question", "Test body question"))
                 .thenReturn(question);
-        UserSession session = new UserSession("admoin", true);
 
         mvc.perform(post("/question/add")
                 .param("title", "Test title question")

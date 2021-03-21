@@ -44,6 +44,12 @@
                             <div class="form-group">
                                 <input type="text" class="form-control input-xlarge" id="bodyComment" name="bodyComment">
                             </div>
+
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"
+                            />
+
                             <button type="submit" class="btn btn-primary">comment</button>
                         </td>
                     </fieldset>
@@ -66,6 +72,11 @@
                 <label class="control-label" for="body">Add new answer</label>
                 <input type="text" class="form-control input-xlarge" id="body" name="answerBody">
             </div>
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"
+            />
 
             <button type="submit" class="btn btn-primary">Add</button>
         </fieldset>

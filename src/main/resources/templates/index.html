@@ -13,6 +13,12 @@
         <a href="/login">Login</a>
         <a href="/register">Register</a>
     </div>
+    <div th:if="${isLogged}">
+        <form action="/user/logout" method="post">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <input type="submit" class="btn btn-link" value="Logout">
+        </form>
+    </div>
 
     <table class="table table-striped">
         <tbody th:if="${not questions.isEmpty()}">
@@ -30,7 +36,7 @@
         </tbody>
     </table>
 
-    <a href="/question/add">Add new question...</a>
+    <a href="/question/add" th:if="${isLogged}">Add new question...</a>
 </div>
 </body>
 </html>

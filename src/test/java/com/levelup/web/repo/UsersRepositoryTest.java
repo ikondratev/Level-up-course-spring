@@ -47,8 +47,8 @@ public class UsersRepositoryTest {
 
     @Test
     public void findByLogin() {
-        assertEquals(0, usersRepository.findByLogin("wrong@test@user@login").size());
-        User userFound = usersRepository.findByLogin("login@first").get(0);
+        assertNull(usersRepository.findByLogin("wrong@test@user@login"));
+        User userFound = usersRepository.findByLogin("login@first");
         assertNotNull(userFound);
         assertEquals("login@first", userFound.getLogin());
     }

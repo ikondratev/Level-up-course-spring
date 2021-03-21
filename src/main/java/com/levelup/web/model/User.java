@@ -17,6 +17,7 @@ public class User {
     @Column(nullable = false, unique = true, length = 25)
     @NotEmpty(message = "user's login can't be empty")
     @Email(message = "format must be in format: ****@***.***")
+
     private String login;
 
     @Column(nullable = false, length = 50)

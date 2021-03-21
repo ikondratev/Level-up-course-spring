@@ -1,12 +1,14 @@
 package com.levelup.web.controller;
 
+import com.levelup.web.repo.UsersRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 @Controller
-@SessionAttributes("user-session")
 public class LoginController {
+
     @GetMapping("/login")
     public String showLoginForm() {
 
