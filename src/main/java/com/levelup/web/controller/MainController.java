@@ -10,34 +10,21 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@SessionAttributes("user-session")
 public class MainController {
     @Autowired
     private QuestionService questionService;
 
     @GetMapping("/")
     public String index(
-            Model model,
-            @ModelAttribute("user-session") UserSession userSession
+            Model model
     ) {
-        String title;
-        if  (userSession.getUserLogin() == null) {
-            title = "Hello anonymous";
-        } else {
-            title = "Hello " + userSession.getUserLogin();
-        }
+        String title = "Holla!";
+
 
         List<Question> questionsList = questionService.findAll();
         model.addAttribute("title", title);
         model.addAttribute("questions", questionsList);
-        model.addAttribute("isAdmin", userSession.isAdmin());
-        model.addAttribute("isLogged", userSession.getUserLogin() != null);
 
         return "index";
-    }
-
-    @ModelAttribute("user-session")
-    public UserSession createUserSession() {
-        return new UserSession();
     }
 }

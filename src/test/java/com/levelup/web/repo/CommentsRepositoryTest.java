@@ -4,6 +4,7 @@ import com.levelup.web.model.Answer;
 import com.levelup.web.model.Comment;
 import com.levelup.web.model.User;
 import com.levelup.tests.TestConfiguration;
+import com.levelup.web.model.UserRoles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -43,7 +44,7 @@ public class CommentsRepositoryTest {
     @Before
     public void setUp() throws Exception {
         testAnswer = new Answer("testBodyAnswer");
-        User author = new User("testLogin@user.com", "testPasswordUser", false);
+        User author = new User("testLogin@user.com", "testPasswordUser", UserRoles.USER);
         usersRepository.save(author);
         answersRepository.save(testAnswer);
         Comment firstComment = new Comment("FirstTestBodyComment");

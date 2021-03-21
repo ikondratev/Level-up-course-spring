@@ -25,11 +25,9 @@ public class CommentController {
     public String addComment(
             Model model,
             @RequestParam String bodyComment,
-            @SessionAttribute("user-session") UserSession userSession,
             @PathVariable String questionId,
             @PathVariable String answerId
     ) {
-        boolean isLogged = userSession.isAdmin();
         Question question = questionService.findById(Long.parseLong(questionId));
 
         if (question != null) {
@@ -37,7 +35,6 @@ public class CommentController {
             model.addAttribute("title", "Question: " + questionId);
             model.addAttribute("question", question);
             model.addAttribute("answers", question.getListOfAnswer());
-            model.addAttribute("isLogged", isLogged);
             return "questionShow";
         } else {
             model.addAttribute("error", "comment for answer: " + answerId + " is not created");

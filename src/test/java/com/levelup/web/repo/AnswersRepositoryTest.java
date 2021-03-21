@@ -4,6 +4,7 @@ import com.levelup.web.model.Answer;
 import com.levelup.web.model.Question;
 import com.levelup.web.model.User;
 import com.levelup.tests.TestConfiguration;
+import com.levelup.web.model.UserRoles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -44,7 +45,7 @@ public class AnswersRepositoryTest {
     public void setUp() {
         Question question = new Question("TestTitle", "TestBody");
         questionsRepository.save(question);
-        User author = new User("test@ogin.com", "testPasswoerd", false);
+        User author = new User("test@ogin.com", "testPasswoerd", UserRoles.USER);
         usersRepository.save(author);
         Answer firstAnswer = new Answer("TestAnswerBodyFirst");
         Answer secondAnswer = new Answer("TestAnswerBodySecond");

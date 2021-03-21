@@ -10,7 +10,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 import java.util.List;
 
@@ -26,12 +25,10 @@ public class AnswerController {
     public String addAnswer(
             Model model,
             @RequestParam String answerBody,
-            @SessionAttribute("user-session") UserSession userSession,
             @PathVariable String questionId
     ) {
 
         List<Answer> answersList;
-        boolean isLogged = userSession.isAdmin();
         Question question = questionService.findById(Long.parseLong(questionId));
 
         if (question != null) {
@@ -43,7 +40,6 @@ public class AnswerController {
             model.addAttribute("title", "Question: " + questionId);
             model.addAttribute("question", question);
             model.addAttribute("answers",  question.getListOfAnswer());
-            model.addAttribute("isLogged", isLogged);
             return "questionShow";
         } else {
             model.addAttribute("error", "Answer for " + questionId + " is not created");

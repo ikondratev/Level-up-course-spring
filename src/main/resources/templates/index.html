@@ -9,9 +9,9 @@
 <div class="container">
     <h1 th:text="${title}"></h1>
 
-    <div th:if="${not isLogged}">
+    <div>
         <a href="/login">Login</a>
-        <!--    <a href="/register">Register</a>-->
+        <a href="/register">Register</a>
     </div>
 
     <table class="table table-striped">
@@ -30,7 +30,7 @@
         </tbody>
     </table>
 
-    <a href="/question/add" th:if="${isAdmin}">Add new question...</a>
+    <a href="/question/add">Add new question...</a>
 </div>
 </body>
 </html>

@@ -4,6 +4,7 @@ import com.levelup.web.model.Answer;
 import com.levelup.web.model.Thumb;
 import com.levelup.web.model.User;
 import com.levelup.tests.TestConfiguration;
+import com.levelup.web.model.UserRoles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,7 +46,7 @@ public class ThumbsRepositoryTest {
     public void setUp() throws Exception {
         testAnswer = new Answer("TestBodyAnswer");
         answersRepository.save(testAnswer);
-        author = new User("test@ogin.com", "testPassUser", false);
+        author = new User("test@ogin.com", "testPassUser", UserRoles.USER);
         usersRepository.save(author);
         Thumb firstThumb = new Thumb();
         Thumb secondThumb = new Thumb();
@@ -61,7 +62,7 @@ public class ThumbsRepositoryTest {
         List<Thumb> foundThumbsList = thumbsRepository.findByAuthorId(author.getId());
         assertEquals(2, foundThumbsList.size());
 
-        User wrongAuthor = new User("wrong@login.com", "wrongPassword", false);
+        User wrongAuthor = new User("wrong@login.com", "wrongPassword", UserRoles.USER);
         List<Thumb> emptyList = thumbsRepository.findByAuthorId(wrongAuthor.getId());
         assertEquals(0, emptyList.size());
     }

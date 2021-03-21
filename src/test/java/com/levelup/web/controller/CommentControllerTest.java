@@ -54,7 +54,6 @@ public class CommentControllerTest {
         testAnswersList.add(testAnswer);
         testQuestion.setListOfAnswer(testAnswersList);
 
-        UserSession session = new UserSession("admin", true);
         Comment testComment = new Comment("testBodyComment");
         testComment.setAnswer(testAnswer);
         Mockito.when(
@@ -63,8 +62,8 @@ public class CommentControllerTest {
 
         mvc.perform(post("/question/{questionId}/{answerId}/add_comment", 1L, 2L)
                 .param("bodyComment", "testBodyComment")
-                .sessionAttr("user-session", session)
-        ).andExpect(status().isOk()).andExpect(model().attribute("isLogged", true))
+
+        ).andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Question: 1"))
                 .andExpect(model().attribute("question", testQuestion))
                 .andExpect(model().attribute("answers", testAnswersList));

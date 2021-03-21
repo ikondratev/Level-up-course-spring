@@ -16,12 +16,11 @@ public class LoginController {
     @PostMapping("/login")
     public RedirectView authoriseAndRedirect(
             @RequestParam String login,
-            @RequestParam String password,
-            @ModelAttribute("user-session") UserSession currentUser
+            @RequestParam String password
     ) {
         if (login.equals("admin") && password.equals("admin")) {
-            currentUser.setUserLogin(login);
-            currentUser.setAdmin(true);
+//            currentUser.setUserLogin(login);
+//            currentUser.setAdmin(true);
             return new RedirectView("/");
         } else {
             return new RedirectView("/login");

@@ -38,7 +38,7 @@
                 </table>
             </tr>
             <tr>
-                <form th:action="@{/question/{questionId}/{answerId}/add_comment(questionId = ${question.id}, answerId = ${answer.id})}" method="post" th:if="${isLogged}" >
+                <form th:action="@{/question/{questionId}/{answerId}/add_comment(questionId = ${question.id}, answerId = ${answer.id})}" method="post" >
                     <fieldset>
                         <td>
                             <div class="form-group">
@@ -60,7 +60,7 @@
     </table>
 
 
-    <form th:action="@{/question/{questionId}/add_answer(questionId = ${question.id})}" method="post" th:if="${isLogged}">
+    <form th:action="@{/question/{questionId}/add_answer(questionId = ${question.id})}" method="post" >
         <fieldset>
             <div class="form-group">
                 <label class="control-label" for="body">Add new answer</label>

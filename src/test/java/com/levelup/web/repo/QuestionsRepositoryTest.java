@@ -3,6 +3,7 @@ package com.levelup.web.repo;
 import com.levelup.web.model.Question;
 import com.levelup.web.model.User;
 import com.levelup.tests.TestConfiguration;
+import com.levelup.web.model.UserRoles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -39,8 +40,8 @@ public class QuestionsRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        User authorFirst = new User("login@first.com", "passFirst", false);
-        User authorSecond = new User("login@second.com", "passSecond", false);
+        User authorFirst = new User("login@first.com", "passFirst", UserRoles.USER);
+        User authorSecond = new User("login@second.com", "passSecond", UserRoles.USER);
         Question questionFirst = new Question("TestTitleFirst", "TestBodyFirst");
         questionFirst.setCreated(date);
         Question questionSecond = new Question("TestTitleSecond ", "TestBodySecond");

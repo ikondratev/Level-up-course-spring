@@ -1,6 +1,7 @@
 package com.levelup.web.repo;
 
 import com.levelup.web.model.User;
+import com.levelup.web.model.UserRoles;
 import com.levelup.web.model.UserStates;
 import com.levelup.tests.TestConfiguration;
 import org.junit.Before;
@@ -34,10 +35,10 @@ public class UsersRepositoryTest {
 
     @Before
     public void init() {
-        User testUserFirst = new User("login@first","qwertyFirst",false);
+        User testUserFirst = new User("login@first","qwertyFirst", UserRoles.ADMIN);
         testUserFirst.setCreated(date);
         testUserFirst.setStatus(UserStates.ACTIVE);
-        User testUserSecond = new User("login@second","qwertySecond",true);
+        User testUserSecond = new User("login@second","qwertySecond", UserRoles.USER);
         testUserSecond.setStatus(UserStates.BANNED);
 
         usersRepository.save(testUserFirst);
@@ -53,22 +54,14 @@ public class UsersRepositoryTest {
     }
 
     @Test
-    public void findByLoginAndPassword() {
-        assertEquals(0, usersRepository.findByLoginAndPassword("wrongTest", "wrongPass").size());
-        User userFound = usersRepository.findByLoginAndPassword("login@first", "qwertyFirst").get(0);
-        assertNotNull(userFound);
-        assertEquals("login@first", userFound.getLogin());
-    }
+    public void findByRole() {
+        List<User> adminUsers = usersRepository.findByRole(UserRoles.ADMIN);
+        assertEquals(adminUsers.size(), 1);
+        assertEquals(adminUsers.get(0).getLogin(), "login@first");
 
-    @Test
-    public void findByIsAdmin() {
-        List<User> isAdminUsers = usersRepository.findByIsAdmin(true);
-        assertEquals(isAdminUsers.size(), 1);
-        assertEquals(isAdminUsers.get(0).getLogin(), "login@second");
-
-        List<User> notAdminUsers = usersRepository.findByIsAdmin(false);
+        List<User> notAdminUsers = usersRepository.findByRole(UserRoles.USER);
         assertEquals(notAdminUsers.size(), 1);
-        assertEquals(notAdminUsers.get(0).getLogin(), "login@first");
+        assertEquals(notAdminUsers.get(0).getLogin(), "login@second");
     }
 
     @Test

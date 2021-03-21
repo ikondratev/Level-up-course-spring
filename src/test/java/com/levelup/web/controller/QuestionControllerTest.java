@@ -43,16 +43,14 @@ public class QuestionControllerTest {
     @Test
     public void showQuestionLoggedAsAdmin() throws Exception {
         Question testQuestion = new Question("Question: 1", "testBodyQuestion");
-        UserSession session = new UserSession("admin", true);
         Mockito.when(questionService.findById(1L)).thenReturn(testQuestion);
 
 
-        mvc.perform(get("/question/{questionId}", 1L).sessionAttr("user-session", session))
+        mvc.perform(get("/question/{questionId}", 1L))
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Question: 1"))
                 .andExpect(model().attribute("question", testQuestion))
-                .andExpect(model().attribute("answers", Collections.emptyList()))
-                .andExpect(model().attribute("isLogged", true));
+                .andExpect(model().attribute("answers", Collections.emptyList()));
 
         Mockito.verify(questionService, Mockito.atLeast(1))
                 .findById(1L);
@@ -68,7 +66,6 @@ public class QuestionControllerTest {
         mvc.perform(post("/question/add")
                 .param("title", "Test title question")
                 .param("body", "Test body question")
-                .sessionAttr("user-session", session)
         )
                 .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Test title question"));

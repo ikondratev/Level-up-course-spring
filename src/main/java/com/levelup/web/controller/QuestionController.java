@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@SessionAttributes("user-session")
 public class QuestionController {
 
     @Autowired
@@ -69,17 +68,14 @@ public class QuestionController {
     @GetMapping("/question/{questionId}")
     public String showQuestion(
             Model model,
-            @SessionAttribute("user-session") UserSession userSession,
             @PathVariable String questionId
     ) {
-        boolean isLogged = userSession.isAdmin();
         Question question = questionService.findById(Long.parseLong(questionId));
 
         if (question != null) {
             model.addAttribute("title", "Question: " + questionId);
             model.addAttribute("question", question);
             model.addAttribute("answers", question.getListOfAnswer());
-            model.addAttribute("isLogged", isLogged);
             return "questionShow";
         } else {
             model.addAttribute("error", "Queston " + questionId + " is not found");

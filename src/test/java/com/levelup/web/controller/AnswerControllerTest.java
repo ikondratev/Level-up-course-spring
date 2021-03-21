@@ -42,7 +42,6 @@ public class AnswerControllerTest {
     @Test
     public void addAnswer() throws Exception {
         Question testQuestion = new Question("Question: 1", "testBodyQuestion");
-        UserSession session = new UserSession("admin", true);
         Mockito.when(questionService.findById(1L)).thenReturn(testQuestion);
 
         Answer testAnswer = new Answer("TestBodyAnswer");
@@ -54,9 +53,8 @@ public class AnswerControllerTest {
 
         mvc.perform(post("/question/{questionId}/add_answer", 1L)
                 .param("answerBody", "TestBodyAnswer")
-                .sessionAttr("user-session", session)
         )
-                .andExpect(status().isOk()).andExpect(model().attribute("isLogged", true))
+                .andExpect(status().isOk())
                 .andExpect(model().attribute("title", "Question: 1"))
                 .andExpect(model().attribute("question", testQuestion))
                 .andExpect(model().attribute("answers", testAnswersList));
