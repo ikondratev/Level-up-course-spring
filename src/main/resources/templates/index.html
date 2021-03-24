@@ -9,10 +9,11 @@
 <div class="container">
     <h1 th:text="${title}"></h1>
 
-    <div>
+    <div th:if="${!isLogged}">
         <a href="/login">Login</a>
         <a href="/registration">Register</a>
     </div>
+
     <div th:if="${isLogged}">
         <form action="/user/logout" method="post">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
