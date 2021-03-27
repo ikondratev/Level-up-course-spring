@@ -18,7 +18,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .antMatchers("/", "/login", "/registration", "/question/**/**").permitAll()
-                .antMatchers("/user/**").hasAnyRole("USER")
+                .antMatchers("/user/**").permitAll()
                 .antMatchers(HttpMethod.GET).permitAll()
                 .anyRequest().denyAll();
 
