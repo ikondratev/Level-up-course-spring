@@ -1,12 +1,3 @@
 language: java
 jdk:
 - oraclejdk14
-addons:
-  sonarcloud:
-    organization: "kilya"
-    token:
-      secure: "DVQmDvQAYI9qsP4v6z7q0npN9GJKDgUbA7quyhmWhQev1KwgwTkpgNza3GjtU1hMpXQXX6LgVmB14M+GR5CSvQLGiSt9jWTIVwCILcvlZnGdbVgnLPlzY7YFxatGOlPrVrQlhls1Eti0IeHAcCMVPuUdEFt6Fqiqx62qBDwcqU4P/RWfDX5Yc2D2q1hDUgAcYHBojuhVLcZ/sCb5YJJDe7ALSm+SJ5nNtpAuxfm3+X4rXymPinIwUYenaFWEGAWkGz727xIkDMtLTxWJWhO5Pc+H4ohtgQxJGXoJbJFkunh9WMeMpVLDJ+zibNfT+SxGPcUECyJfBgQKFtULy/QZMADfqFi5F+liqOogzPU4g9udyJbcngWTakMGCczCk4aabxzPxOveCK2PT8G1Z0lqQhQQ0tPg/mto3QsTQNdvPAQ+ngGM64pAMCC3O2A/zKAYc0Q+hUlEmzFQDCz1eQ/qxOY+6VBDLGAulZO/e0BEDp2GS4m1viHvrYcO56OexaReHEiYmkr11yvcu4BwwYI92+CxUpAcZbl73yJU+PVyZ6nfcOWHeMW8uY1erBFFcmGo0UMoVtkRBm5+mWkcL3aqgeDQarYz1pf9u5ajeUHc7Clk0QQ0Tj3ucE4O3l85IXt1TM1HIt/8Br0WhKYTCK772p2P/h/mV0eMbcamfD4LHNc="
-
-script:
-  # JaCoCo is used to have code coverage, "-Pcoverage" activates the maven profile in the pom.xml
-  - mvn clean verify sonar:sonar -Pcoverage
