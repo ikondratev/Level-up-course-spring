@@ -20,7 +20,7 @@ public class LoginController {
         return "loginForm";
     }
 
-    @GetMapping("/registration")
+    @GetMapping("/registration/user")
     public String getRegistration(
             Model model,
             @ModelAttribute("registrationForm") RegistrationForm registrationForm,
@@ -29,7 +29,7 @@ public class LoginController {
         return "registration";
     }
 
-    @PostMapping("/registration")
+    @PostMapping("/registration/user")
     public String showRegistrationForm(
             Model model,
             @ModelAttribute("registrationForm") RegistrationForm registrationForm,
