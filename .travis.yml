@@ -4,8 +4,6 @@ jdk:
 addons:
   sonarcloud:
     organization: "kilya"
-    token:
-      secure: "JRhWKcD66pWMQOkdmcGc5JRzswnSuHf60oWkkX+pf1fgAXp5hnvAsU64K9bEzIW+K4BEsOb/JejP4DnGiEu2x9MkWuwtMc6obgrplIVZU3ATPX5deX7PYSshoF2svxnwrm6f8ST5oZolL018aq6hIZQK/oqV4qY/rPkXFRBEcqcBm2YIKa1Zlj7vfDG/UhKekO9WR6zKCOcaiI+Le+YMa3+DYw0cN+tLKzgvi325DKynAiaTQDFLQWhxIFjGxf0D1LH9phawutvoLBFGQCtZPVamDg4jFSMOhlkGcStTH9zZIbRW/SG88XmZ0xfQy3zGNWky4uFpDmI2uHnD0GfejjgIF1hjzipJagMFuswbIyuei7Wk6ux9x9TTHcOybDjyaUqaMQVk/cIpJgAlAZiPNARRBEly7hgaFsRV+pskFeSDJgBI04qMADRLHJo07pgDf/azpbYdz/4Mo4uT6qfoeYBkjkjbc5YAkrKp3xw/Tuy5kP66DwMOQRD+MHFqp1cS2t/eTtqi7VcnUaa/hT2zymADvER0pquXBNSZ88KyOS/YVeemN/MnAfliTHqkVSNBR0SK7gFb3jWtOtAptpLqSDNxa2pxhYJGbteS8zcALF84GeaX5zajbaxlid7++tdwNNtBXwLC7NAGPlie4QpRX6WlurXcvYsq/6MzIxk32UA="
 
 script:
   # the following command line builds the project, runs the tests with coverage and then execute the SonarCloud analysis
