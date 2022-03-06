@@ -43,7 +43,6 @@ public class AnswerControllerTest {
     @MockBean
     private UserService userService;
 
-
     @Test
     public void addAnswer() throws Exception {
         Question testQuestion = new Question("Question: 1", "testBodyQuestion");
