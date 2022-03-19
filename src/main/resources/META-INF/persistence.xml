@@ -8,7 +8,7 @@
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:h2:./target/h2-2"/>
             <property name="hibernate.connection.user" value="sa"/>
-            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.connection.passPhrase" value=""/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
@@ -23,10 +23,10 @@
             <property name="hibernate.connection.driver_class" value="org.h2.Driver"/>
             <property name="hibernate.connection.url" value="jdbc:h2:./target/app"/>
             <property name="hibernate.connection.user" value="sa"/>
-            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.connection.passPhrase" value=""/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.format_sql" value="true"/>
-            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.hbm2ddl.auto" value="create-drop"/>
         </properties>
     </persistence-unit>
 </persistence>

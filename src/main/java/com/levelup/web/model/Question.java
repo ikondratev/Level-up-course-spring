@@ -1,6 +1,10 @@
 package com.levelup.web.model;
 
+import org.hibernate.validator.constraints.UniqueElements;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,9 +18,11 @@ public class Question {
     private Long id;
 
     @Column(nullable = false, unique = true, length = 50)
+    @NotEmpty(message = "Please add title")
     private String title;
 
     @Column(nullable = false, length = 255)
+    @NotBlank
     private String body;
 
     @Temporal(TemporalType.DATE)

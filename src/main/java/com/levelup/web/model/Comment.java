@@ -1,6 +1,7 @@
 package com.levelup.web.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 
 @Entity
@@ -12,6 +13,7 @@ public class Comment {
     private Long id;
 
     @Column(nullable = false, length = 255)
+    @NotEmpty(message = "comment's body can't be empty")
     private String body;
 
     @Temporal(TemporalType.DATE)

@@ -38,12 +38,18 @@
                 </table>
             </tr>
             <tr>
-                <form th:action="@{/question/{questionId}/{answerId}/add_comment(questionId = ${question.id}, answerId = ${answer.id})}" method="post" th:if="${isLogged}" >
+                <form th:action="@{/question/{questionId}/{answerId}/add_comment(questionId = ${question.id}, answerId = ${answer.id})}" method="post" >
                     <fieldset>
                         <td>
                             <div class="form-group">
                                 <input type="text" class="form-control input-xlarge" id="bodyComment" name="bodyComment">
                             </div>
+
+                            <input type="hidden"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"
+                            />
+
                             <button type="submit" class="btn btn-primary">comment</button>
                         </td>
                     </fieldset>
@@ -60,12 +66,17 @@
     </table>
 
 
-    <form th:action="@{/question/{questionId}/add_answer(questionId = ${question.id})}" method="post" th:if="${isLogged}">
+    <form th:action="@{/question/{questionId}/add_answer(questionId = ${question.id})}" method="post" >
         <fieldset>
             <div class="form-group">
                 <label class="control-label" for="body">Add new answer</label>
                 <input type="text" class="form-control input-xlarge" id="body" name="answerBody">
             </div>
+
+            <input type="hidden"
+                   th:name="${_csrf.parameterName}"
+                   th:value="${_csrf.token}"
+            />
 
             <button type="submit" class="btn btn-primary">Add</button>
         </fieldset>

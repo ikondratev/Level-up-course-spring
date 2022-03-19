@@ -1,16 +1,19 @@
-package com.levelup.web.dao;
+package com.levelup.web.repo;
 
 import com.levelup.web.model.Answer;
 import com.levelup.web.model.Thumb;
 import com.levelup.web.model.User;
 import com.levelup.tests.TestConfiguration;
+import com.levelup.web.model.UserRoles;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 
@@ -22,14 +25,18 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = TestConfiguration.class)
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
-public class ThumbsDaoTest {
+@SpringBootTest
+@Transactional
+public class ThumbsRepositoryTest {
     @Autowired
-    private EntityManager manager;
+    private ThumbsRepository thumbsRepository;
 
     @Autowired
-    private ThumbsDao thumbsDao;
+    private AnswersRepository answersRepository;
 
-    private String base = System.getProperty("test_base");
+    @Autowired
+    private UsersRepository usersRepository;
+
     private Date date = new Date();
     private Date dateBefore = new Date(date.getTime() - 1000000000);
     private User author;
@@ -37,43 +44,36 @@ public class ThumbsDaoTest {
 
     @Before
     public void setUp() throws Exception {
-        manager.getTransaction().begin();
         testAnswer = new Answer("TestBodyAnswer");
-        manager.persist(testAnswer);
-        author = new User("testLoginUser", "testPassUser", false);
-        manager.persist(author);
+        answersRepository.save(testAnswer);
+        author = new User("test@ogin.com", "testPassUser", UserRoles.USER);
+        usersRepository.save(author);
         Thumb firstThumb = new Thumb();
         Thumb secondThumb = new Thumb();
         firstThumb.setAuthor(author);
         secondThumb.setAuthor(author);
         firstThumb.setAnswer(testAnswer);
-        manager.persist(firstThumb);
-        manager.persist(secondThumb);
-        manager.getTransaction().commit();
-    }
-
-    @Test
-    public void findAll() {
-        assertEquals(2, thumbsDao.findAll().size());
+        thumbsRepository.save(firstThumb);
+        thumbsRepository.save(secondThumb);
     }
 
     @Test
     public void findByAuthor() {
-        List<Thumb> foundThumbsList = thumbsDao.findByAuthor(author);
+        List<Thumb> foundThumbsList = thumbsRepository.findByAuthorId(author.getId());
         assertEquals(2, foundThumbsList.size());
 
-        User wrongAuthor = new User("wrongLogin", "wrongPassword", false);
-        List<Thumb> emptyList = thumbsDao.findByAuthor(wrongAuthor);
+        User wrongAuthor = new User("wrong@login.com", "wrongPassword", UserRoles.USER);
+        List<Thumb> emptyList = thumbsRepository.findByAuthorId(wrongAuthor.getId());
         assertEquals(0, emptyList.size());
     }
 
     @Test
     public void findByAnswer() {
-        List<Thumb> foundThumbsList = thumbsDao.findByAnswer(testAnswer);
+        List<Thumb> foundThumbsList = thumbsRepository.findByAnswerId(testAnswer.getId());
         assertEquals(1, foundThumbsList.size());
 
         Answer wrongAnswer = new Answer("WrongBodyAnswer");
-        List<Thumb> emptyList = thumbsDao.findByAnswer(wrongAnswer);
+        List<Thumb> emptyList = thumbsRepository.findByAnswerId(wrongAnswer.getId());
         assertEquals(0, emptyList.size());
     }
 }

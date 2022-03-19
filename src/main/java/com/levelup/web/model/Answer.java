@@ -1,6 +1,7 @@
 package com.levelup.web.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ public class Answer {
     private Long id;
 
     @Column(nullable = false, length = 255)
+    @NotEmpty(message = "body can't be empty")
     private String body;
 
     @Temporal(TemporalType.DATE)

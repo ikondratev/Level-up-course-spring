@@ -1,6 +1,8 @@
 package com.levelup.web.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
 import java.util.Date;
 import java.util.List;
 
@@ -12,20 +14,23 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 15)
+    @Column(nullable = false, unique = true, length = 25)
+    @NotEmpty(message = "user's login can't be empty")
+    @Email(message = "format must be in format: ****@***.***")
     private String login;
 
-    @Column(nullable = false, length = 50)
-    private String password;
+    @Column(nullable = false, length = 250)
+    @NotEmpty(message = "passPhrase can't be blank")
+    private String passPhrase;
 
     @Enumerated(EnumType.STRING)
     private UserStates status;
 
+    @Enumerated(EnumType.STRING)
+    private UserRoles role;
+
     @Temporal(TemporalType.DATE)
     private Date created;
-
-    @Column(nullable = false)
-    private boolean isAdmin;
 
     @OneToMany(mappedBy = "author")
     private List<Question> listOfQuestions;
@@ -42,10 +47,18 @@ public class User {
     public User() {
     }
 
-    public User(String login, String password, boolean isAdmin) {
+    public User(String login, String passPhrase, UserRoles userRole) {
         this.login = login;
-        this.password = password;
-        this.isAdmin = isAdmin;
+        this.passPhrase = passPhrase;
+        this.role = userRole;
+    }
+
+    public UserRoles getRole() {
+        return role;
+    }
+
+    public void setRole(UserRoles role) {
+        this.role = role;
     }
 
     public List<Thumb> getListOfLikes() {
@@ -72,20 +85,12 @@ public class User {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
+    public String getPassPhrase() {
+        return passPhrase;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+    public void setPassPhrase(String passPhrase) {
+        this.passPhrase = passPhrase;
     }
 
     public List<Question> getListOfQuestions() {
@@ -126,5 +131,13 @@ public class User {
 
     public void setStatus(UserStates status) {
         this.status = status;
+    }
+
+    public List<Thumb> getListOfThumbs() {
+        return listOfThumbs;
+    }
+
+    public void setListOfThumbs(List<Thumb> listOfThumbs) {
+        this.listOfThumbs = listOfThumbs;
     }
 }

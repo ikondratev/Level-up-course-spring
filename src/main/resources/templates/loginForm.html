@@ -14,6 +14,13 @@
         </div>
         <div class="col"></div>
     </div>
+    <div class="row" th:if="${#request.getParameter('error') != null}">
+        <div class="col"></div>
+        <div class="col alert alert-danger">
+            Invalid username or password
+        </div>
+        <div class="col"></div>
+    </div>
     <div class="row">
         <div class="col"></div>
         <div class="col">
@@ -25,9 +32,14 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label" for="password">Password</label>
-                        <input type="password" class="form-control input-xlarge" id="password" name="password">
+                        <label class="control-label" for="passPhrase">Password</label>
+                        <input type="password" class="form-control input-xlarge" id="passPhrase" name="passPhrase">
                     </div>
+
+                    <input type="hidden"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}"
+                    />
 
                     <button type="submit" class="btn btn-primary">Sign in</button>
                 </fieldset>
